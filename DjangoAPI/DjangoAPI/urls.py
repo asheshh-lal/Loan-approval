@@ -21,6 +21,6 @@ import MyAPI
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("MyAPI.urls")),  # Include the URLs from MyAPI.urls
+    path('', include("MyAPI.urls")),  # Include the URLs from MyAPI.urls
 
 ]
