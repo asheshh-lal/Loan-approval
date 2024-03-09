@@ -11,7 +11,7 @@ class approvals(models.Model):
 		('No', 'No')
 	)
 	GRADUATED_CHOICES = (
-		('Graduate', 'Graduated'),
+		('Graduate', 'Graduate'),
 		('Not_Graduate', 'Not_Graduate')
 	)
 	SELFEMPLOYED_CHOICES = (
