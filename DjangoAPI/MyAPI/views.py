@@ -13,6 +13,8 @@ import pandas as pd
 from keras import backend as K  # Import K from keras.backend
 from  MyAPI.serializers import approvalsSerializers
 from .forms import ApprovalForm
+from django.contrib import messages
+
 # Create your views here.
 class ApprovalsView(viewsets.ModelViewSet):
 	queryset = approvals.objects.all()
@@ -61,38 +63,37 @@ def approvereject(unit):
         y_pred = (y_pred > 0.58)
         newdf = pd.DataFrame(y_pred, columns=['Status'])
         newdf = newdf.replace({True: 'Approved', False: 'Rejected'})
-        K.clear_session()
-        return (newdf.values[0][0]) 
-
+        return (newdf.values[0][0])
     except ValueError as e:
         return (e.args[0])
 
 			
 def cxcontact(request):
-	if request.method=='POST':
-		form=ApprovalForm(request.POST)
-		if form.is_valid():
-				Firstname = form.cleaned_data['firstname']
-				Lastname = form.cleaned_data['lastname']
-				Dependents = form.cleaned_data['Dependents']
-				ApplicantIncome = form.cleaned_data['ApplicantIncome']
-				CoapplicantIncome = form.cleaned_data['CoapplicantIncome']
-				LoanAmount = form.cleaned_data['LoanAmount']
-				Loan_Amount_Term = form.cleaned_data['Loan_Amount_Term']
-				Credit_History = form.cleaned_data['Credit_History']
-				Gender = form.cleaned_data['Gender']
-				Married = form.cleaned_data['Married']
-				Education = form.cleaned_data['Education']
-				Self_Employed = form.cleaned_data['Self_Employed']
-				Property_Area = form.cleaned_data['Property_Area']
-				myDict = (request.POST).dict()
-				df = pd.DataFrame(myDict, index=[0])
-				# print(ohevalue(df))
-				print(approvereject(ohevalue(df)))
+    if request.method == 'POST':
+        form = ApprovalForm(request.POST)
+        if form.is_valid():
+            Firstname = form.cleaned_data['firstname']
+            Lastname = form.cleaned_data['lastname']
+            Dependents = form.cleaned_data['Dependents']
+            ApplicantIncome = form.cleaned_data['ApplicantIncome']
+            CoapplicantIncome = form.cleaned_data['CoapplicantIncome']
+            LoanAmount = form.cleaned_data['LoanAmount']
+            Loan_Amount_Term = form.cleaned_data['Loan_Amount_Term']
+            Credit_History = form.cleaned_data['Credit_History']
+            Gender = form.cleaned_data['Gender']
+            Married = form.cleaned_data['Married']
+            Education = form.cleaned_data['Education']
+            Self_Employed = form.cleaned_data['Self_Employed']
+            Property_Area = form.cleaned_data['Property_Area']
+            myDict = (request.POST).dict()
+            df = pd.DataFrame(myDict, index=[0])
+            print(approvereject(ohevalue(df)))
+            answer = approvereject(ohevalue(df))
+            messages.success(request,'Application Status: {}'.format(answer))
 					
-	form=ApprovalForm()
-				
-	return render(request, 'myform/cxform.html', {'form':form})
+    form=ApprovalForm()
+
+    return render(request, 'myform/cxform.html', {'form':form})
      
 		
 	
